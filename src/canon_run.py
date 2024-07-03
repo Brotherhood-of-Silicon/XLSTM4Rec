@@ -12,7 +12,7 @@ from recbole.utils import (
     get_environment,
     set_color,
 )
-from canonXLSTM4Rec import xLSTM4Rec
+from canon_XLSTM4Rec import xLSTM4Rec
 import os
 
 
