@@ -19,7 +19,7 @@ class xLSTM4Rec(SequentialRecommender):
         self.dropout = nn.Dropout(self.dropout_prob)
         
         self.xlstm_layers = nn.ModuleList([
-            xLSTM("mm",torch.zeros(2048, 200, 64).to('cuda'),factor=1,depth=2)
+            xLSTM("m",torch.zeros(256, 200, 64).to('cuda'),factor=8,depth=4)
         ])
         
         if self.loss_type == "BPR":
