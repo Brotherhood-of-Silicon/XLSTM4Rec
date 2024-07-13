@@ -4,6 +4,42 @@ import torch.nn.functional as F
 from xLSTM.utils import BlockDiagonal, CausalConv1D
 
 class sLSTMblock(nn.Module):
+    """
+    A custom sLSTM block for sequence modeling.
+
+    Args:
+        x_example (torch.Tensor): An example input tensor used to initialize the layer dimensions.
+        depth (int): The depth parameter for the BlockDiagonal gates.
+        dropout (float, optional): Dropout rate for regularization. Default is 0.2.
+
+    Attributes:
+        input_size (int): The size of the input features.
+        ln (nn.LayerNorm): Layer normalization applied to the input.
+        conv (CausalConv1D): Causal convolution layer.
+        drop (nn.Dropout): Dropout layer for regularization.
+        i_gate, f_gate, o_gate, z_gate (BlockDiagonal): Input, forget, output, and cell gates.
+        ri_gate, rf_gate, ro_gate, rz_gate (BlockDiagonal): Recurrent input, forget, output, and cell gates.
+        ln_i, ln_f, ln_o, ln_z (nn.LayerNorm): Layer normalization for gates.
+        GN (nn.LayerNorm): Layer normalization applied to the hidden state.
+        ln_c, ln_n, ln_h (nn.LayerNorm): Layer normalization for cell state, input modulation, and hidden state.
+        left_linear, right_linear (nn.Linear): Linear layers for the final projection.
+        ln_out (nn.LayerNorm): Layer normalization before the output projection.
+        proj (nn.Linear): Linear layer for projecting the output to the input size.
+        nt_1, ct_1, ht_1, mt_1 (torch.Tensor): Hidden and cell states initialized as zeros.
+
+    Methods:
+        init_states(x):
+            Initializes the hidden and cell states with zeros based on the input tensor dimensions.
+        
+        forward(x):
+            Defines the forward pass of the sLSTM block. Applies layer normalization, causal convolution,
+            gate operations, and combines the outputs through linear transformations and layer normalization.
+    
+    Example:
+        model = sLSTMblock(x_example=torch.randn(1, 8, 16), depth=4)
+        model.init_states(torch.randn(1, 8, 16))
+        output = model(torch.randn(1, 8, 16))
+    """
     def __init__(self, x_example, depth, dropout=0.2):
         super().__init__()
         self.input_size = x_example.shape[2]

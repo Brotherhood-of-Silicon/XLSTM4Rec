@@ -4,6 +4,49 @@ import torch.nn.functional as F
 from xLSTM.utils import BlockDiagonal, CausalConv1D
 
 class mLSTMblock(nn.Module):
+    """
+    A custom mLSTM block for sequence modeling with multi-head attention and gated operations.
+
+    Args:
+        x_example (torch.Tensor): An example input tensor used to initialize the layer dimensions.
+        factor (float): The factor to determine the hidden size relative to the input size.
+        depth (int): The depth parameter for the BlockDiagonal gates.
+        dropout (float, optional): Dropout rate for regularization. Default is 0.2.
+
+    Attributes:
+        input_size (int): The size of the input features.
+        hidden_size (int): The size of the hidden layer, determined by the input size and factor.
+        ln (nn.LayerNorm): Layer normalization applied to the input.
+        left, right (nn.Linear): Linear layers for splitting the input.
+        conv (CausalConv1D): Causal convolution layer.
+        drop (nn.Dropout): Dropout layer for regularization.
+        lskip (nn.Linear): Linear layer for skip connection.
+        wq, wk, wv (BlockDiagonal): Linear layers for query, key, and value in multi-head attention.
+        dropq, dropk, dropv (nn.Dropout): Dropout layers for query, key, and value.
+        i_gate, f_gate, o_gate (nn.Linear): Input, forget, and output gates.
+        ln_c, ln_n (nn.LayerNorm): Layer normalization for cell state and input modulation.
+        lnf, lno, lni (nn.LayerNorm): Layer normalization for forget, output, and input gates.
+        GN (nn.LayerNorm): Layer normalization applied to the hidden state.
+        ln_out (nn.LayerNorm): Layer normalization before the output projection.
+        drop2 (nn.Dropout): Dropout layer for regularization.
+        proj (nn.Linear): Linear layer for projecting the output to the input size.
+        ln_proj (nn.LayerNorm): Layer normalization after the output projection.
+        ct_1, nt_1 (torch.Tensor): Hidden and cell states initialized as zeros.
+
+    Methods:
+        init_states(x_example):
+            Initializes the hidden and cell states with zeros based on the input tensor dimensions.
+        
+        forward(x):
+            Defines the forward pass of the mLSTM block. Applies layer normalization, 
+            linear transformations, causal convolution, multi-head attention, gated operations,
+            and combines the outputs through linear transformations and layer normalization.
+    
+    Example:
+        model = mLSTMblock(x_example=torch.randn(1, 8, 16), factor=2, depth=4)
+        model.init_states(torch.randn(1, 8, 16))
+        output = model(torch.randn(1, 8, 16))
+    """
     def __init__(self, x_example, factor, depth, dropout=0.2):
         super().__init__()
         self.input_size = x_example.shape[2]

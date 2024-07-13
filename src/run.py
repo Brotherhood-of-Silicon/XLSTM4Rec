@@ -14,6 +14,9 @@ from recbole.utils import (
 )
 from XLSTM4Rec import xLSTM4Rec
 import os
+import torch
+import datetime
+
 
 
 # Configuration
@@ -72,3 +75,17 @@ logger.info(
 
 logger.info(set_color("best valid ", "yellow") + f": {best_valid_result}")
 logger.info(set_color("test result", "yellow") + f": {test_result}")
+
+
+# Save the model
+if not os.path.exists('models'):
+    os.makedirs('models')
+
+current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+model_path = f"models/xLSTM4Rec_{current_time}.pt"
+torch.save(model.state_dict(), model_path)
+logger.info(set_color("Model saved at", "green") + f": {model_path}")
+
+# model = xLSTM4Rec(config, train_data.dataset).to(config['device'])
+# model.load_state_dict(torch.load(model_path))
+# model.eval()
