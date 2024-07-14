@@ -1,4 +1,9 @@
 # XLSTM4Rec
+![GitHub stars](https://img.shields.io/github/stars/Brotherhood-of-Silicon/XLSTM4Rec) 
+![GitHub size](https://img.shields.io/github/repo-size/Brotherhood-of-Silicon/XLSTM4Rec) 
+![GitHub License](https://img.shields.io/github/license/Brotherhood-of-Silicon/XLSTM4Rec)
+![GitHub forks](https://img.shields.io/github/forks/Brotherhood-of-Silicon/XLSTM4Rec) 
+
 
 Official repository for the upcoming paper **xLSTM4Rec**. This repository contains the code and resources necessary to replicate the experiments and results presented in the paper.
 
