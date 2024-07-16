@@ -72,5 +72,6 @@ To set up the environment and run the model, follow these steps:
 
 ## Authors
 
-- @Leonardo16AM
-- @EdianBC
+- Leonardo16AM
+- EdianBC
+- AlexBeovides
