@@ -40,7 +40,7 @@ config_path = os.path.relpath('config.yaml')
 config = Config(model=xLSTM4Rec, config_file_list=[config_path])
 
 # Load CSV file and extract movie lists and IDs
-csv_file_path = 'dataset/ml-1m/ml-1m.csv'
+csv_file_path = 'ml-1m.csv'
 movie_list, movie_id_list = load_dataset_from_csv(csv_file_path)
 
 # List available models

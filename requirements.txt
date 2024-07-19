@@ -1,4 +1,4 @@
-recbole
-torch
-pandas
-gradio
+recbole==1.2.0
+torch==2.2.0+cu121
+pandas==2.2.2
+gradio==4.38.1
